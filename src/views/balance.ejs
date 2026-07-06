@@ -1,31 +1,111 @@
 <!DOCTYPE html>
 <html>
-<head><title>Balance</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance de Comprobación</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>📈 Balance de Comprobación (USD)</h2>
-    <a href="/contabilidad">Volver</a>
-    <table border="1">
-        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
-        <% 
-            const balance = require('../services/accountingService.js').obtenerBalance(datos);
-            for (const item of balance.lineas) { 
-        %>
-            <tr>
-                <td><%= item.cuenta %></td>
-                <td><%= item.debe > 0 ? '$' + item.debe.toFixed(2) : '-' %></td>
-                <td><%= item.haber > 0 ? '$' + item.haber.toFixed(2) : '-' %></td>
-            </tr>
-        <% } %>
-        <tr>
-            <td><strong>TOTAL</strong></td>
-            <td><strong>$<%= balance.totalDebe.toFixed(2) %></strong></td>
-            <td><strong>$<%= balance.totalHaber.toFixed(2) %></strong></td>
-        </tr>
-    </table>
-    <% if (balance.totalDebe === balance.totalHaber) { %>
-        <p style="color:green;">✅ El balance cuadra.</p>
-    <% } else { %>
-        <p style="color:red;">⚠️ El balance NO cuadra.</p>
-    <% } %>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad" class="active">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">📈 Balance de Comprobación</h2>
+                <a href="/contabilidad" class="btn btn-outline">⬅ Volver</a>
+            </div>
+
+            <%
+                // Calcular balance usando el mismo servicio que la API
+                const cuentas = {};
+                for (const cuenta of datos.cuentas) {
+                    cuentas[cuenta] = 0;
+                }
+                for (const t of datos.libro_diario) {
+                    const monto = t.monto_usd;
+                    if (!cuentas[t.cuenta_debito]) cuentas[t.cuenta_debito] = 0;
+                    if (!cuentas[t.cuenta_credito]) cuentas[t.cuenta_credito] = 0;
+                    cuentas[t.cuenta_debito] += monto;
+                    cuentas[t.cuenta_credito] -= monto;
+                }
+                let totalDebe = 0, totalHaber = 0;
+                const lineas = [];
+                for (const [cuenta, saldo] of Object.entries(cuentas)) {
+                    let debe = 0, haber = 0;
+                    if (saldo > 0) {
+                        debe = saldo;
+                        totalDebe += debe;
+                    } else if (saldo < 0) {
+                        haber = -saldo;
+                        totalHaber += haber;
+                    }
+                    lineas.push({ cuenta, debe, haber });
+                }
+            %>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th style="text-align: right;">Debe</th>
+                            <th style="text-align: right;">Haber</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (const item of lineas) { %>
+                            <tr>
+                                <td><strong><%= item.cuenta %></strong></td>
+                                <td style="text-align: right;">
+                                    <%= item.debe > 0 ? '$' + item.debe.toFixed(2) : '-' %>
+                                </td>
+                                <td style="text-align: right;">
+                                    <%= item.haber > 0 ? '$' + item.haber.toFixed(2) : '-' %>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                    <tfoot style="font-weight: 700; background: #f8f9fa;">
+                        <tr>
+                            <td>TOTALES</td>
+                            <td style="text-align: right;">$<%= totalDebe.toFixed(2) %></td>
+                            <td style="text-align: right;">$<%= totalHaber.toFixed(2) %></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; border-radius: 10px; text-align: center; font-weight: 600;">
+                <% if (totalDebe === totalHaber) { %>
+                    <div style="background: #d4edda; padding: 1rem; border-radius: 10px; color: #155724;">
+                        ✅ El balance cuadra perfectamente
+                    </div>
+                <% } else { %>
+                    <div style="background: #f8d7da; padding: 1rem; border-radius: 10px; color: #721c24;">
+                        ⚠️ El balance NO cuadra. Revisa las transacciones.
+                    </div>
+                <% } %>
+            </div>
+
+            <div style="margin-top: 1rem; color: #888; font-size: 0.9rem; text-align: center;">
+                Basado en <%= datos.libro_diario.length %> transacciones en USD
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
