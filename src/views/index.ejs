@@ -2,23 +2,61 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Sistema de Inventario v5.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inventario</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
     <div class="container">
-        <h1>📊 Sistema de Inventario y Contabilidad</h1>
         <% if (modoPrueba) { %>
-            <p class="badge">⚠️ MODO PRUEBA ACTIVO - NADA SE GUARDA</p>
+            <div class="alert alert-warning">⚠️ MODO PRUEBA ACTIVO - Los cambios no se guardan</div>
         <% } %>
-        <div class="menu">
-            <a href="/inventario">📦 Inventario</a>
-            <a href="/ventas">💰 Ventas</a>
-            <a href="/contabilidad">📊 Contabilidad</a>
-            <a href="/facturas">🧾 Facturas</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">📊 Sistema de Inventario y Contabilidad</h1>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="background: #e8f0fe; padding: 1.5rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem;">📦</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #1a2a6c;"><%= Object.keys(datos.productos).length %></div>
+                    <div style="color: #666;">Productos</div>
+                </div>
+                <div style="background: #e6f7ed; padding: 1.5rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem;">🧾</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #11998e;"><%= datos.facturas.length %></div>
+                    <div style="color: #666;">Facturas</div>
+                </div>
+                <div style="background: #fef3e2; padding: 1.5rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem;">💰</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #f7971e;"><%= datos.libro_diario.length %></div>
+                    <div style="color: #666;">Transacciones</div>
+                </div>
+            </div>
+
+            <div class="btn-group" style="justify-content: center; margin-top: 1rem;">
+                <a href="/inventario" class="btn btn-primary">📦 Ver Inventario</a>
+                <a href="/ventas" class="btn btn-success">💰 Nueva Venta</a>
+                <a href="/facturas" class="btn btn-warning">🧾 Facturas</a>
+            </div>
         </div>
-        <p>Total productos: <%= Object.keys(datos.productos).length %></p>
-        <p>Total facturas: <%= datos.facturas.length %></p>
     </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js &bull; <%= new Date().getFullYear() %></p>
+    </footer>
 </body>
 </html>
