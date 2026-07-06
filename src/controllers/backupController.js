@@ -1,19 +1,43 @@
-import { crearBackup, restaurarBackup } from '../services/backupService.js';
+import * as backupService from '../services/backupService.js';
 
+/**
+ * Controlador para crear una copia de seguridad.
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ */
 export function hacerBackup(req, res) {
     try {
-        crearBackup();
-        res.json({ message: 'Backup creado' });
+        backupService.crearBackup();
+        res.status(200).json({ 
+            success: true, 
+            message: '✅ Copia de seguridad creada exitosamente' 
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error al crear backup:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: error.message || 'Error al crear la copia de seguridad' 
+        });
     }
 }
 
+/**
+ * Controlador para restaurar desde una copia de seguridad.
+ * @param {Object} req - Objeto de solicitud HTTP
+ * @param {Object} res - Objeto de respuesta HTTP
+ */
 export function restaurarBackup(req, res) {
     try {
-        restaurarBackup();
-        res.json({ message: 'Backup restaurado' });
+        backupService.restaurarBackup();
+        res.status(200).json({ 
+            success: true, 
+            message: '✅ Datos restaurados desde copia de seguridad' 
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error al restaurar backup:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: error.message || 'Error al restaurar la copia de seguridad' 
+        });
     }
 }
