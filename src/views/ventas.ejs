@@ -1,15 +1,79 @@
 <!DOCTYPE html>
 <html>
-<head><title>Ventas</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>💰 Registrar Venta</h2>
-    <form method="post" action="/api/ventas">
-        <label>Cliente ID: <input type="text" name="clienteId"></label><br>
-        <label>Producto: <input type="text" name="productoNombre" required></label><br>
-        <label>Cantidad: <input type="number" name="cantidad" required></label><br>
-        <label>Precio Unitario USD: <input type="number" step="0.01" name="precioUnitarioUSD" required></label><br>
-        <button type="submit">Registrar Venta</button>
-    </form>
-    <a href="/">Volver</a>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas" class="active">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <div class="card-header">
+                <h2 class="card-title">💰 Registrar Venta</h2>
+            </div>
+
+            <form method="post" action="/api/ventas">
+                <div class="form-group">
+                    <label>Cliente ID <small>(opcional)</small></label>
+                    <input type="text" name="clienteId" class="form-control" placeholder="Dejar vacío para consumidor final">
+                </div>
+
+                <div class="form-group">
+                    <label>Producto <span class="required">*</span></label>
+                    <input type="text" name="productoNombre" class="form-control" required placeholder="Nombre del producto">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cantidad <span class="required">*</span></label>
+                        <input type="number" name="cantidad" class="form-control" required placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Unitario USD <span class="required">*</span></label>
+                        <input type="number" step="0.01" name="precioUnitarioUSD" class="form-control" required placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="btn-group" style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-success">✅ Registrar Venta</button>
+                    <a href="/" class="btn btn-outline">⬅ Volver</a>
+                </div>
+            </form>
+        </div>
+
+        <% if (datos.productos && Object.keys(datos.productos).length > 0) { %>
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">📋 Productos disponibles</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.8rem;">
+                    <% for (const [nombre, info] of Object.entries(datos.productos).slice(0, 10)) { %>
+                        <div style="background: #f8f9fa; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.9rem;">
+                            <strong><%= nombre %></strong><br>
+                            <span style="color: #666;">Stock: <%= info.cantidad %> <%= info.unidad %></span>
+                        </div>
+                    <% } %>
+                </div>
+                <% if (Object.keys(datos.productos).length > 10) { %>
+                    <p style="margin-top: 0.8rem; color: #888;">... y <%= Object.keys(datos.productos).length - 10 %> más</p>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
