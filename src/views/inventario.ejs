@@ -1,1 +1,14 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Inventario</title></head>
+<body>
+    <h2>📦 Inventario</h2>
+    <a href="/">Volver</a>
+    <a href="/inventario/agregar">➕ Agregar</a>
+    <ul>
+        <% for (const [nombre, info] of Object.entries(datos.productos)) { %>
+            <li><%= info.codigo %> - <%= nombre %>: <%= info.cantidad %> <%= info.unidad %></li>
+        <% } %>
+    </ul>
+</body>
+</html>
