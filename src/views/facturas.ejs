@@ -1,13 +1,71 @@
 <!DOCTYPE html>
 <html>
-<head><title>Facturas</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>🧾 Facturas</h2>
-    <a href="/">Volver</a>
-    <ul>
-        <% for (const f of datos.facturas) { %>
-            <li><a href="/factura/<%= f.numero %>"><%= f.numero %></a> - <%= f.fecha %> - <%= f.cliente.nombre %> - $<%= f.total_usd.toFixed(2) %></li>
-        <% } %>
-    </ul>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas" class="active">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">🧾 Facturas</h2>
+                <a href="/" class="btn btn-outline">⬅ Volver</a>
+            </div>
+
+            <% if (datos.facturas.length === 0) { %>
+                <div class="alert alert-warning">No hay facturas registradas.</div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Factura</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Total USD</th>
+                                <th>Total Bs</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const f of datos.facturas.slice().reverse()) { %>
+                                <tr>
+                                    <td><strong><%= f.numero %></strong></td>
+                                    <td><%= f.fecha %></td>
+                                    <td><%= f.cliente.nombre %></td>
+                                    <td>$<%= f.total_usd.toFixed(2) %></td>
+                                    <td>Bs <%= f.total_bs.toFixed(2) %></td>
+                                    <td>
+                                        <a href="/factura/<%= f.numero %>" class="btn btn-sm btn-primary">Ver</a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 1rem; color: #888; font-size: 0.9rem;">
+                    Mostrando <%= datos.facturas.length %> facturas
+                </p>
+            <% } %>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
