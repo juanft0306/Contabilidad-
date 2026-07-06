@@ -59,4 +59,9 @@ router.get('/balance', (req, res) => {
     res.render('balance');
 });
 
+// NUEVA RUTA: Configuración
+router.get('/configuracion', (req, res) => {
+    res.render('configuracion');
+});
+
 export default router;
