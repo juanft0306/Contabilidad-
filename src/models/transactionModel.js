@@ -36,3 +36,26 @@ export function crearFactura(datos, transaccion, clienteNombre, clienteRif) {
     datos.facturas.push(factura);
     return factura;
       }
+// Añadir estas funciones al final del archivo
+export function obtenerFacturasPendientes(facturas) {
+    return facturas.filter(f => f.saldo_pendiente > 0);
+}
+
+export function obtenerFacturasPorCliente(facturas, clienteId) {
+    return facturas.filter(f => f.cliente.id === clienteId);
+}
+
+export function calcularDeudaTotal(facturas, clienteId) {
+    const facturasCliente = obtenerFacturasPorCliente(facturas, clienteId);
+    return facturasCliente.reduce((total, f) => total + f.saldo_pendiente, 0);
+}
+
+export function actualizarSaldoFactura(factura, montoPagado) {
+    factura.saldo_pendiente = Math.max(0, factura.saldo_pendiente - montoPagado);
+    if (factura.saldo_pendiente === 0) {
+        factura.estado = 'cancelada';
+    } else if (factura.saldo_pendiente < factura.total_usd) {
+        factura.estado = 'parcial';
+    }
+    return factura;
+}
