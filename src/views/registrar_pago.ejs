@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Pago</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+                <a href="/cuentas-por-cobrar" class="active">💳 Cuentas por Cobrar</a>
+                <a href="/configuracion">⚙️ Configuración</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <div class="card-header">
+                <h2 class="card-title">💰 Registrar Pago</h2>
+            </div>
+
+            <form id="pagoForm" method="post" action="/api/pagos/registrar">
+                <div class="form-group">
+                    <label>Factura <span class="required">*</span></label>
+                    <select name="facturaNumero" class="form-control" required>
+                        <option value="">Selecciona una factura</option>
+                        <% for (const f of facturasPendientes) { %>
+                            <option value="<%= f.numero %>">
+                                <%= f.numero %> - <%= f.cliente.nombre %> - Saldo: $<%= f.saldo_pendiente.toFixed(2) %>
+                            </option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto <span class="required">*</span></label>
+                    <input type="number" step="0.01" name="monto" class="form-control" required placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Pago <span class="required">*</span></label>
+                    <select name="metodoPago" class="form-control" required>
+                        <option value="efectivo">💵 Efectivo</option>
+                        <option value="pago_movil">📱 Pago Móvil</option>
+                        <option value="transferencia">🏦 Transferencia</option>
+                        <option value="usd">💲 USD</option>
+                        <option value="cheque">📄 Cheque</option>
+                        <option value="otro">🔄 Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Moneda <span class="required">*</span></label>
+                    <select name="moneda" class="form-control" required>
+                        <option value="Bs">Bs</option>
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tasa de Cambio <small>(si es USD)</small></label>
+                    <input type="number" step="0.01" name="tasa" class="form-control" placeholder="Tasa Bs/USD">
+                </div>
+
+                <div class="form-group">
+                    <label>Referencia <small>(opcional)</small></label>
+                    <input type="text" name="referencia" class="form-control" placeholder="N° de transacción, cheque, etc.">
+                </div>
+
+                <div id="mensaje" style="margin: 1rem 0;"></div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-success">✅ Registrar Pago</button>
+                    <a href="/cuentas-por-cobrar" class="btn btn-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
+
+    <script>
+        document.getElementById('pagoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            const msg = document.getElementById('mensaje');
+            
+            msg.innerHTML = '<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px;">⏳ Registrando pago...</div>';
+
+            try {
+                const res = await fetch('/api/pagos/registrar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        facturaNumero: data.facturaNumero,
+                        monto: parseFloat(data.monto),
+                        metodoPago: data.metodoPago,
+                        moneda: data.moneda,
+                        tasa: data.tasa ? parseFloat(data.tasa) : 1,
+                        referencia: data.referencia || ''
+                    })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    msg.innerHTML = `<div style="background: #d4edda; padding: 0.8rem; border-radius: 8px; color: #155724;">✅ ${result.message}</div>`;
+                    setTimeout(() => window.location.href = '/cuentas-por-cobrar', 1500);
+                } else {
+                    msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ ${result.error}</div>`;
+                }
+            } catch (error) {
+                msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ Error: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
