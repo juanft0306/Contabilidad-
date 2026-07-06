@@ -1,1 +1,15 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Ventas</title></head>
+<body>
+    <h2>💰 Registrar Venta</h2>
+    <form method="post" action="/api/ventas">
+        <label>Cliente ID: <input type="text" name="clienteId"></label><br>
+        <label>Producto: <input type="text" name="productoNombre" required></label><br>
+        <label>Cantidad: <input type="number" name="cantidad" required></label><br>
+        <label>Precio Unitario USD: <input type="number" step="0.01" name="precioUnitarioUSD" required></label><br>
+        <button type="submit">Registrar Venta</button>
+    </form>
+    <a href="/">Volver</a>
+</body>
+</html>
