@@ -3,7 +3,7 @@ import { crearPago } from '../models/paymentModel.js';
 import { actualizarSaldoFactura } from '../models/transactionModel.js';
 
 export function registrarPago(datos, facturaNumero, monto, metodoPago, moneda, tasa = 1, referencia = '') {
-    // Buscar factura
+    // Buscar factura por número
     const factura = datos.facturas.find(f => f.numero === facturaNumero);
     if (!factura) throw new Error('Factura no encontrada');
     if (factura.saldo_pendiente <= 0) throw new Error('Esta factura ya está cancelada');
@@ -29,15 +29,16 @@ export function obtenerResumenCartera(datos) {
     const resumen = {};
     for (const factura of datos.facturas) {
         if (factura.saldo_pendiente > 0) {
-            const clienteId = factura.cliente.id;
+            const clienteId = factura.cliente.id || 'sin-id';
             if (!resumen[clienteId]) {
                 resumen[clienteId] = {
-                    cliente: factura.cliente.nombre,
-                    totalDeuda: 0,
+                    id: clienteId,
+                    nombre: factura.cliente.nombre || 'Cliente sin nombre',
+                    deudaTotal: 0,
                     facturas: []
                 };
             }
-            resumen[clienteId].totalDeuda += factura.saldo_pendiente;
+            resumen[clienteId].deudaTotal += factura.saldo_pendiente;
             resumen[clienteId].facturas.push(factura);
         }
     }
