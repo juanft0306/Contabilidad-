@@ -1,1 +1,13 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Facturas</title></head>
+<body>
+    <h2>🧾 Facturas</h2>
+    <a href="/">Volver</a>
+    <ul>
+        <% for (const f of datos.facturas) { %>
+            <li><a href="/factura/<%= f.numero %>"><%= f.numero %></a> - <%= f.fecha %> - <%= f.cliente.nombre %> - $<%= f.total_usd.toFixed(2) %></li>
+        <% } %>
+    </ul>
+</body>
+</html>
