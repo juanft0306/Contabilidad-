@@ -1,12 +1,476 @@
-body { font-family: Arial, sans-serif; margin: 20px; background: #f0f0f0; }
-.container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-h1 { color: #2c3e50; }
-.menu { display: flex; flex-direction: column; gap: 10px; }
-.menu a { background: #3498db; color: white; padding: 15px; text-decoration: none; border-radius: 5px; text-align: center; font-weight: bold; }
-.menu a:hover { background: #2980b9; }
-.badge { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 5px; display: inline-block; }
-ul { list-style: none; padding: 0; }
-li { padding: 5px 0; border-bottom: 1px solid #ddd; }
-table { width: 100%; border-collapse: collapse; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background: #3498db; color: white; }
+/* ========================================
+   ESTILOS GLOBALES
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================
+   ENCABEZADO Y NAVEGACIÓN
+   ======================================== */
+header {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.navbar-brand span {
+    font-weight: 300;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+}
+
+.nav-links a:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.nav-links a.active {
+    background: rgba(255,255,255,0.3);
+    font-weight: 600;
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+   ======================================== */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+/* ========================================
+   TARJETAS Y PANELES
+   ======================================== */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1a2a6c;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #1a2a6c, #2d4a8e);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 42, 108, 0.35);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.35);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #b21f1f, #e74c3c);
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(178, 31, 31, 0.35);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #333;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(247, 151, 30, 0.35);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #1a2a6c;
+    border: 2px solid #1a2a6c;
+}
+
+.btn-outline:hover {
+    background: #1a2a6c;
+    color: white;
+}
+
+.btn-sm {
+    padding: 0.3rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* ========================================
+   FORMULARIOS
+   ======================================== */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.form-group label .required {
+    color: #e74c3c;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #1a2a6c;
+    box-shadow: 0 0 0 4px rgba(26, 42, 108, 0.1);
+    background: white;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+table thead {
+    background: linear-gradient(135deg, #1a2a6c, #2d4a8e);
+    color: white;
+}
+
+table th {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+table td {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================================
+   LISTAS DE PRODUCTOS / FACTURAS
+   ======================================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #eef0f2;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    border-color: #1a2a6c;
+}
+
+.product-card .code {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+    background: #f0f2f5;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.product-card .name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0.25rem;
+}
+
+.product-card .meta {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+}
+
+.product-card .price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a2a6c;
+    margin: 0.5rem 0;
+}
+
+/* ========================================
+   FACTURA
+   ======================================== */
+.factura-container {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.factura-header {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px double #1a2a6c;
+    margin-bottom: 1.5rem;
+}
+
+.factura-header h2 {
+    font-size: 2.2rem;
+    color: #1a2a6c;
+    letter-spacing: 2px;
+}
+
+.factura-header .sub {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.factura-cliente {
+    background: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.factura-totales {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #f0f2f5;
+    text-align: right;
+}
+
+.factura-totales .total {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a2a6c;
+}
+
+.factura-totales .label {
+    font-weight: 600;
+    color: #555;
+}
+
+/* ========================================
+   MENSAJES / ALERTAS
+   ======================================== */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+/* ========================================
+   BADGE / MODO PRUEBA
+   ======================================== */
+.badge {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.badge-warning {
+    background: #f39c12;
+    color: white;
+}
+
+/* ========================================
+   PIE DE PÁGINA
+   ======================================== */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: #888;
+    font-size: 0.9rem;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 2rem;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nav-links {
+        justify-content: center;
+    }
+    
+    .card {
+        padding: 1.2rem;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .factura-container {
+        padding: 1.5rem;
+    }
+  }
