@@ -1,1 +1,17 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Agregar Producto</title></head>
+<body>
+    <h2>➕ Agregar Producto</h2>
+    <form method="post" action="/api/productos">
+        <label>Nombre: <input type="text" name="nombre" required></label><br>
+        <label>Código (dejar vacío para auto): <input type="text" name="codigo"></label><br>
+        <label>Categoría: <input type="text" name="categoria" value="General"></label><br>
+        <label>Precio USD: <input type="number" step="0.01" name="precio_usd" required></label><br>
+        <label>Cantidad: <input type="number" name="cantidad" required></label><br>
+        <label>Unidad: <input type="text" name="unidad" value="u"></label><br>
+        <button type="submit">Guardar</button>
+    </form>
+    <a href="/inventario">Cancelar</a>
+</body>
+</html>
