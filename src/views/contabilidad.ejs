@@ -1,12 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head><title>Contabilidad</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contabilidad</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>📊 Contabilidad</h2>
-    <a href="/">Volver</a>
-    <ul>
-        <li><a href="/balance">Balance de comprobación</a></li>
-        <li>Libro diario (próximamente)</li>
-    </ul>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad" class="active">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">📊 Contabilidad</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <a href="/balance" class="btn btn-primary" style="padding: 1.5rem; font-size: 1.1rem;">
+                    📈 Balance de Comprobación
+                </a>
+                <div style="background: #f0f2f5; padding: 1.5rem; border-radius: 12px; text-align: center; opacity: 0.6;">
+                    <div style="font-size: 2rem;">📖</div>
+                    <div style="font-weight: 600;">Libro Diario</div>
+                    <div style="font-size: 0.9rem; color: #888;">Próximamente</div>
+                </div>
+                <div style="background: #f0f2f5; padding: 1.5rem; border-radius: 12px; text-align: center; opacity: 0.6;">
+                    <div style="font-size: 2rem;">📁</div>
+                    <div style="font-weight: 600;">Exportar CSV</div>
+                    <div style="font-size: 0.9rem; color: #888;">Próximamente</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <a href="/" class="btn btn-outline">⬅ Volver al inicio</a>
+            </div>
+        </div>
+
+        <div class="card" style="background: #f8f9fa;">
+            <h4 style="margin-bottom: 0.5rem; color: #555;">📊 Resumen</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div>
+                    <span style="color: #888;">Productos</span><br>
+                    <span style="font-size: 1.5rem; font-weight: 700; color: #1a2a6c;"><%= Object.keys(datos.productos).length %></span>
+                </div>
+                <div>
+                    <span style="color: #888;">Facturas</span><br>
+                    <span style="font-size: 1.5rem; font-weight: 700; color: #11998e;"><%= datos.facturas.length %></span>
+                </div>
+                <div>
+                    <span style="color: #888;">Transacciones</span><br>
+                    <span style="font-size: 1.5rem; font-weight: 700; color: #f7971e;"><%= datos.libro_diario.length %></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
