@@ -1,1 +1,25 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Factura <%= factura.numero %></title></head>
+<body>
+    <h2>FACTURA N° <%= factura.numero %></h2>
+    <p>Fecha: <%= factura.fecha %></p>
+    <p>Cliente: <%= factura.cliente.nombre %> (RIF: <%= factura.cliente.rif %>)</p>
+    <table border="1">
+        <tr><th>Producto</th><th>Código</th><th>Cantidad</th><th>Precio USD</th><th>Subtotal</th></tr>
+        <% for (const item of factura.items) { %>
+            <tr>
+                <td><%= item.producto %></td>
+                <td><%= item.codigo %></td>
+                <td><%= item.cantidad %></td>
+                <td>$<%= item.precio_unitario_usd.toFixed(2) %></td>
+                <td>$<%= item.subtotal_usd.toFixed(2) %></td>
+            </tr>
+        <% } %>
+    </table>
+    <p><strong>Total USD:</strong> $<%= factura.total_usd.toFixed(2) %></p>
+    <p><strong>Tasa:</strong> <%= factura.tasa_usada.toFixed(2) %> Bs/USD</p>
+    <p><strong>Total Bs:</strong> Bs <%= factura.total_bs.toFixed(2) %></p>
+    <a href="/facturas">Volver a Facturas</a>
+</body>
+</html>
