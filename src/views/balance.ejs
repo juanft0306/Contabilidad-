@@ -1,1 +1,31 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head><title>Balance</title></head>
+<body>
+    <h2>📈 Balance de Comprobación (USD)</h2>
+    <a href="/contabilidad">Volver</a>
+    <table border="1">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <% 
+            const balance = require('../services/accountingService.js').obtenerBalance(datos);
+            for (const item of balance.lineas) { 
+        %>
+            <tr>
+                <td><%= item.cuenta %></td>
+                <td><%= item.debe > 0 ? '$' + item.debe.toFixed(2) : '-' %></td>
+                <td><%= item.haber > 0 ? '$' + item.haber.toFixed(2) : '-' %></td>
+            </tr>
+        <% } %>
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td><strong>$<%= balance.totalDebe.toFixed(2) %></strong></td>
+            <td><strong>$<%= balance.totalHaber.toFixed(2) %></strong></td>
+        </tr>
+    </table>
+    <% if (balance.totalDebe === balance.totalHaber) { %>
+        <p style="color:green;">✅ El balance cuadra.</p>
+    <% } else { %>
+        <p style="color:red;">⚠️ El balance NO cuadra.</p>
+    <% } %>
+</body>
+</html>
