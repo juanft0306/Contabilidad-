@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuentas por Cobrar</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+                <a href="/cuentas-por-cobrar" class="active">💳 Cuentas por Cobrar</a>
+                <a href="/configuracion">⚙️ Configuración</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">💳 Cuentas por Cobrar</h2>
+                <a href="/registrar-pago" class="btn btn-success">💰 Registrar Pago</a>
+            </div>
+
+            <% if (cartera.length === 0) { %>
+                <div class="alert alert-success">✅ No hay cuentas por cobrar pendientes</div>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Deuda Total (USD)</th>
+                                <th>Facturas Pendientes</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const cliente of cartera) { %>
+                                <tr>
+                                    <td><strong><%= cliente.nombre %></strong></td>
+                                    <td>$<%= cliente.deudaTotal.toFixed(2) %></td>
+                                    <td><%= cliente.facturas.length %></td>
+                                    <td>
+                                        <a href="/registrar-pago?cliente=<%= cliente.id %>" class="btn btn-sm btn-success">Registrar Pago</a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
+</body>
+</html>
