@@ -1,1 +1,24 @@
-//vacio//
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Inventario v5.0</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sistema de Inventario y Contabilidad</h1>
+        <% if (modoPrueba) { %>
+            <p class="badge">⚠️ MODO PRUEBA ACTIVO - NADA SE GUARDA</p>
+        <% } %>
+        <div class="menu">
+            <a href="/inventario">📦 Inventario</a>
+            <a href="/ventas">💰 Ventas</a>
+            <a href="/contabilidad">📊 Contabilidad</a>
+            <a href="/facturas">🧾 Facturas</a>
+        </div>
+        <p>Total productos: <%= Object.keys(datos.productos).length %></p>
+        <p>Total facturas: <%= datos.facturas.length %></p>
+    </div>
+</body>
+</html>
