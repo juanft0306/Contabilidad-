@@ -1,1 +1,3 @@
-//vacio//
+node_modules/
+data/*.json
+.env
