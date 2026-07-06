@@ -1,14 +1,69 @@
 <!DOCTYPE html>
 <html>
-<head><title>Inventario</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>📦 Inventario</h2>
-    <a href="/">Volver</a>
-    <a href="/inventario/agregar">➕ Agregar</a>
-    <ul>
-        <% for (const [nombre, info] of Object.entries(datos.productos)) { %>
-            <li><%= info.codigo %> - <%= nombre %>: <%= info.cantidad %> <%= info.unidad %></li>
-        <% } %>
-    </ul>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario" class="active">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">📦 Inventario</h2>
+                <div class="btn-group">
+                    <a href="/inventario/agregar" class="btn btn-success">➕ Agregar</a>
+                    <a href="/" class="btn btn-outline">⬅ Volver</a>
+                </div>
+            </div>
+
+            <% if (Object.keys(datos.productos).length === 0) { %>
+                <div class="alert alert-warning">No hay productos en el inventario.</div>
+            <% } else { %>
+                <div class="product-grid">
+                    <% for (const [nombre, info] of Object.entries(datos.productos)) { %>
+                        <div class="product-card">
+                            <div class="code"><%= info.codigo || 'S/C' %></div>
+                            <div class="name"><%= nombre %></div>
+                            <div class="meta">📁 <%= info.categoria || 'General' %></div>
+                            <div class="meta">📦 <strong><%= info.cantidad %></strong> <%= info.unidad || 'u' %></div>
+                            <div class="price">$<%= info.precio_usd.toFixed(2) %> USD</div>
+                            <div class="btn-group" style="margin-top: 0.8rem;">
+                                <button class="btn btn-sm btn-danger" onclick="if(confirm('¿Eliminar <%= nombre %>?')) window.location='/api/productos/<%= nombre %>'">Eliminar</button>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
+
+    <script>
+        // Función para eliminar producto con confirmación
+        document.querySelectorAll('.btn-danger').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm(this.textContent.trim() + '?')) {
+                    window.location = this.href || '#';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
