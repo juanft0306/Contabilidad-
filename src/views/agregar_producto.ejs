@@ -1,17 +1,220 @@
 <!DOCTYPE html>
 <html>
-<head><title>Agregar Producto</title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Mejoras específicas para el formulario */
+        .form-card {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .form-card .card-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-group label .required {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        .form-group .hint {
+            font-size: 0.85rem;
+            color: #888;
+            font-weight: 400;
+            margin-left: 0.5rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 4px rgba(26, 42, 108, 0.1);
+            background: white;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a2a6c;
+            border: 2px solid #1a2a6c;
+        }
+        .btn-outline:hover {
+            background: #1a2a6c;
+            color: white;
+        }
+        .icon-input {
+            position: relative;
+        }
+        .icon-input .icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 1.2rem;
+        }
+        .icon-input .form-control {
+            padding-left: 2.8rem;
+        }
+        .badge-info {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a2a6c;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
 <body>
-    <h2>➕ Agregar Producto</h2>
-    <form method="post" action="/api/productos">
-        <label>Nombre: <input type="text" name="nombre" required></label><br>
-        <label>Código (dejar vacío para auto): <input type="text" name="codigo"></label><br>
-        <label>Categoría: <input type="text" name="categoria" value="General"></label><br>
-        <label>Precio USD: <input type="number" step="0.01" name="precio_usd" required></label><br>
-        <label>Cantidad: <input type="number" name="cantidad" required></label><br>
-        <label>Unidad: <input type="text" name="unidad" value="u"></label><br>
-        <button type="submit">Guardar</button>
-    </form>
-    <a href="/inventario">Cancelar</a>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario" class="active">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-card">
+            <div class="card-title">
+                ✨ Agregar Producto
+                <span style="display: block; font-size: 0.9rem; font-weight: 400; color: #888; margin-top: 0.3rem;">
+                    Completa los datos del nuevo producto
+                </span>
+            </div>
+
+            <form method="post" action="/api/productos">
+                <div class="form-group">
+                    <label>
+                        📝 Nombre <span class="required">*</span>
+                        <span class="hint">Ej: Arroz, Leche, Harina</span>
+                    </label>
+                    <input type="text" name="nombre" class="form-control" required placeholder="Nombre del producto">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        🔢 Código <span class="hint">(dejar vacío para auto-generar)</span>
+                    </label>
+                    <input type="text" name="codigo" class="form-control" placeholder="Ej: A001, B010, etc.">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            📁 Categoría
+                            <span class="hint">opcional</span>
+                        </label>
+                        <input type="text" name="categoria" class="form-control" value="General" placeholder="General">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            📏 Unidad
+                            <span class="hint">opcional</span>
+                        </label>
+                        <input type="text" name="unidad" class="form-control" value="u" placeholder="u, kg, litro, etc.">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            💰 Precio USD <span class="required">*</span>
+                            <span class="hint">en dólares</span>
+                        </label>
+                        <div class="icon-input">
+                            <span class="icon">$</span>
+                            <input type="number" step="0.01" name="precio_usd" class="form-control" required placeholder="0.00" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            📦 Cantidad <span class="required">*</span>
+                            <span class="hint">stock inicial</span>
+                        </label>
+                        <input type="number" name="cantidad" class="form-control" required placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 0.8rem 1.2rem; border-radius: 10px; margin: 1rem 0; font-size: 0.9rem; color: #555;">
+                    💡 <strong>Tip:</strong> Si dejas el código vacío, se generará automáticamente (ej: A001, B010, etc.)
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-success">💾 Guardar Producto</button>
+                    <a href="/inventario" class="btn btn-outline">❌ Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
