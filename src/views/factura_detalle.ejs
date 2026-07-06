@@ -1,25 +1,83 @@
 <!DOCTYPE html>
 <html>
-<head><title>Factura <%= factura.numero %></title></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura <%= factura.numero %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <h2>FACTURA N° <%= factura.numero %></h2>
-    <p>Fecha: <%= factura.fecha %></p>
-    <p>Cliente: <%= factura.cliente.nombre %> (RIF: <%= factura.cliente.rif %>)</p>
-    <table border="1">
-        <tr><th>Producto</th><th>Código</th><th>Cantidad</th><th>Precio USD</th><th>Subtotal</th></tr>
-        <% for (const item of factura.items) { %>
-            <tr>
-                <td><%= item.producto %></td>
-                <td><%= item.codigo %></td>
-                <td><%= item.cantidad %></td>
-                <td>$<%= item.precio_unitario_usd.toFixed(2) %></td>
-                <td>$<%= item.subtotal_usd.toFixed(2) %></td>
-            </tr>
-        <% } %>
-    </table>
-    <p><strong>Total USD:</strong> $<%= factura.total_usd.toFixed(2) %></p>
-    <p><strong>Tasa:</strong> <%= factura.tasa_usada.toFixed(2) %> Bs/USD</p>
-    <p><strong>Total Bs:</strong> Bs <%= factura.total_bs.toFixed(2) %></p>
-    <a href="/facturas">Volver a Facturas</a>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">📊 <span>Contabilidad</span></a>
+            <div class="nav-links">
+                <a href="/inventario">📦 Inventario</a>
+                <a href="/ventas">💰 Ventas</a>
+                <a href="/contabilidad">📊 Contabilidad</a>
+                <a href="/facturas" class="active">🧾 Facturas</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="factura-container">
+            <div class="factura-header">
+                <h2>FACTURA N° <%= factura.numero %></h2>
+                <div class="sub"><%= factura.fecha %></div>
+            </div>
+
+            <div class="factura-cliente">
+                <strong>Cliente:</strong> <%= factura.cliente.nombre %><br>
+                <strong>RIF:</strong> <%= factura.cliente.rif || 'N/A' %>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Código</th>
+                            <th>Cantidad</th>
+                            <th>Precio USD</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (const item of factura.items) { %>
+                            <tr>
+                                <td><%= item.producto %></td>
+                                <td><%= item.codigo || 'S/C' %></td>
+                                <td><%= item.cantidad %></td>
+                                <td>$<%= item.precio_unitario_usd.toFixed(2) %></td>
+                                <td>$<%= item.subtotal_usd.toFixed(2) %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="factura-totales">
+                <div><span class="label">Subtotal:</span> $<%= factura.subtotal_usd.toFixed(2) %></div>
+                <div style="margin-top: 0.5rem;">
+                    <span class="label">Tasa de cambio:</span> <%= factura.tasa_usada.toFixed(2) %> Bs/USD
+                </div>
+                <div style="margin-top: 0.5rem;">
+                    <span class="label">Total en Bs:</span> Bs <%= factura.total_bs.toFixed(2) %>
+                </div>
+                <div class="total">
+                    TOTAL USD: $<%= factura.total_usd.toFixed(2) %>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/facturas" class="btn btn-outline">⬅ Volver a Facturas</a>
+                <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimir</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema de Contabilidad Dual v5.0 &bull; Node.js</p>
+    </footer>
 </body>
 </html>
