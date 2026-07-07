@@ -5,6 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .config-section {
+            margin-bottom: 2rem;
+        }
+        .config-section .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a2a6c;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f2f5;
+        }
+        .backup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        .backup-actions .btn {
+            padding: 0.7rem 1.8rem;
+        }
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border: 2px dashed #ddd;
+        }
+        .file-input-wrapper input[type="file"] {
+            padding: 0.5rem;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .file-input-wrapper input[type="file"]:hover {
+            cursor: pointer;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+        .info-box {
+            background: #e8f0fe;
+            border-left: 4px solid #1a2a6c;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #1a2a6c;
+        }
+        .flash-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        .flash-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+        @media (max-width: 600px) {
+            .backup-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .file-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,12 +106,20 @@
                 <a href="/ventas">💰 Ventas</a>
                 <a href="/contabilidad">📊 Contabilidad</a>
                 <a href="/facturas">🧾 Facturas</a>
+                <a href="/cuentas-por-cobrar">💳 Cuentas por Cobrar</a>
                 <a href="/configuracion" class="active">⚙️ Configuración</a>
             </div>
         </nav>
     </header>
 
     <div class="container">
+        <!-- Mostrar mensajes flash si existen -->
+        <% if (flash && flash.message) { %>
+            <div class="flash-message flash-<%= flash.type || 'success' %>">
+                <%= flash.message %>
+            </div>
+        <% } %>
+
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">⚙️ Configuración</h2>
@@ -28,20 +127,23 @@
             </div>
 
             <!-- Sección: Copia de Seguridad -->
-            <div style="margin: 2rem 0;">
-                <h3 style="color: #1a2a6c; margin-bottom: 1rem;">📁 Copia de Seguridad</h3>
+            <div class="config-section">
+                <div class="section-title">📁 Copia de Seguridad</div>
+                
                 <p style="color: #666; margin-bottom: 1.2rem;">
-                    Exporta todos tus datos a un archivo Excel, o importa desde un archivo Excel para restaurar la información.
+                    Exporta todos tus datos (productos, clientes, facturas, transacciones, etc.) a un archivo Excel, o importa desde un archivo Excel para restaurar toda la información.
                 </p>
 
-                <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                <div class="backup-actions">
+                    <!-- Botón Exportar -->
                     <a href="/api/backup/exportar-excel" class="btn btn-success">
                         📤 Exportar a Excel
                     </a>
 
+                    <!-- Formulario Importar -->
                     <form action="/api/backup/importar-excel" method="post" enctype="multipart/form-data" style="display: inline;">
-                        <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; background: #f8f9fa; padding: 0.5rem 1rem; border-radius: 10px; border: 2px dashed #ddd;">
-                            <input type="file" name="archivo" accept=".xlsx,.xls" required style="padding: 0.5rem; border: none; background: white; border-radius: 8px;">
+                        <div class="file-input-wrapper">
+                            <input type="file" name="archivo" accept=".xlsx,.xls" required>
                             <button type="submit" class="btn btn-warning">
                                 📥 Importar desde Excel
                             </button>
@@ -49,17 +151,25 @@
                     </form>
                 </div>
 
-                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 0.8rem 1.2rem; border-radius: 8px; margin-top: 1rem; font-size: 0.9rem; color: #856404;">
-                    ⚠️ <strong>Importante:</strong> Al importar desde Excel, se <strong>sobrescribirán TODOS</strong> los datos actuales.
+                <div class="warning-box">
+                    ⚠️ <strong>Importante:</strong> Al importar desde Excel, se <strong>sobrescribirán TODOS</strong> los datos actuales (productos, clientes, facturas, etc.). Asegúrate de tener una copia de seguridad previa.
+                </div>
+
+                <div class="info-box">
+                    💡 El archivo Excel exportado contiene <strong>6 hojas</strong>: 
+                    Productos, Clientes, Proveedores, Facturas, Libro Diario, Tasas y Configuración de Empresa.
                 </div>
             </div>
 
             <hr style="margin: 2rem 0; border: none; border-top: 2px solid #f0f2f5;">
 
-            <!-- Sección: Backup JSON -->
-            <div style="margin: 2rem 0;">
-                <h3 style="color: #1a2a6c; margin-bottom: 1rem;">💾 Backup Interno (JSON)</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <!-- Sección: Backup JSON (interno) -->
+            <div class="config-section">
+                <div class="section-title">💾 Backup Interno (JSON)</div>
+                <p style="color: #666; margin-bottom: 1.2rem;">
+                    Crea o restaura una copia de seguridad en formato JSON (archivo interno del sistema).
+                </p>
+                <div class="backup-actions">
                     <button onclick="crearBackupJSON()" class="btn btn-primary">
                         💾 Crear Backup JSON
                     </button>
@@ -68,6 +178,36 @@
                     </button>
                 </div>
                 <div id="backupMessage" style="margin-top: 1rem;"></div>
+                <div class="warning-box" style="margin-top: 0.8rem;">
+                    ⚠️ El backup JSON guarda los datos en el servidor (archivo <code>data/datos_backup.json</code>). 
+                    Restaurar sobrescribirá los datos actuales.
+                </div>
+            </div>
+
+            <hr style="margin: 2rem 0; border: none; border-top: 2px solid #f0f2f5;">
+
+            <!-- Sección: Modo Prueba -->
+            <div class="config-section">
+                <div class="section-title">🧪 Modo Prueba</div>
+                <p style="color: #666; margin-bottom: 1rem;">
+                    El modo prueba te permite hacer cambios <strong>sin afectar los datos reales</strong>. 
+                    Al activarlo, se guarda una copia de seguridad de tus datos actuales y empiezas con un entorno limpio.
+                    Al desactivarlo, <strong>todos los cambios realizados en modo prueba se eliminan</strong> y se restauran los datos originales.
+                </p>
+                
+                <div id="modoPruebaStatus" style="margin-bottom: 1rem; padding: 0.8rem 1.2rem; border-radius: 8px; background: #e8f0fe; border-left: 4px solid #1a2a6c;">
+                    Cargando estado del modo prueba...
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <button onclick="activarModoPrueba()" id="btnActivar" class="btn btn-warning">
+                        🧪 Activar Modo Prueba
+                    </button>
+                    <button onclick="desactivarModoPrueba()" id="btnDesactivar" class="btn btn-danger" style="display: none;">
+                        ❌ Desactivar Modo Prueba (borrar cambios)
+                    </button>
+                </div>
+                <div id="modoPruebaMensaje" style="margin-top: 1rem;"></div>
             </div>
         </div>
     </div>
@@ -77,28 +217,76 @@
     </footer>
 
     <script>
+        // ========== BACKUP JSON ==========
         async function crearBackupJSON() {
             const msg = document.getElementById('backupMessage');
-            msg.innerHTML = '<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px;">⏳ Creando backup...</div>';
+            msg.innerHTML = '<div class="flash-message flash-warning">⏳ Creando backup...</div>';
             try {
                 const res = await fetch('/api/backup/crear', { method: 'POST' });
                 const data = await res.json();
                 if (data.success) {
-                    msg.innerHTML = `<div style="background: #d4edda; padding: 0.8rem; border-radius: 8px; color: #155724;">✅ ${data.message}</div>`;
+                    msg.innerHTML = `<div class="flash-message flash-success">✅ ${data.message}</div>`;
                 } else {
-                    msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ ${data.error}</div>`;
+                    msg.innerHTML = `<div class="flash-message flash-error">❌ ${data.error}</div>`;
                 }
             } catch (error) {
-                msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ Error: ${error.message}</div>`;
+                msg.innerHTML = `<div class="flash-message flash-error">❌ Error: ${error.message}</div>`;
             }
         }
 
         async function restaurarBackupJSON() {
             if (!confirm('⚠️ ¿Estás seguro de restaurar el backup JSON? Se perderán los cambios actuales.')) return;
             const msg = document.getElementById('backupMessage');
-            msg.innerHTML = '<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px;">⏳ Restaurando backup...</div>';
+            msg.innerHTML = '<div class="flash-message flash-warning">⏳ Restaurando backup...</div>';
             try {
                 const res = await fetch('/api/backup/restaurar', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    msg.innerHTML = `<div class="flash-message flash-success">✅ ${data.message}</div>`;
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    msg.innerHTML = `<div class="flash-message flash-error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                msg.innerHTML = `<div class="flash-message flash-error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // ========== MODO PRUEBA ==========
+        async function obtenerEstadoModoPrueba() {
+            try {
+                const res = await fetch('/api/modo-prueba/estado');
+                const data = await res.json();
+                const statusDiv = document.getElementById('modoPruebaStatus');
+                const btnActivar = document.getElementById('btnActivar');
+                const btnDesactivar = document.getElementById('btnDesactivar');
+                
+                if (data.activo) {
+                    statusDiv.innerHTML = `<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px; color: #856404; border-left: 4px solid #ffc107;">
+                        ⚠️ <strong>Modo prueba ACTIVO</strong> - Los cambios no se guardan en disco.
+                    </div>`;
+                    btnActivar.style.display = 'none';
+                    btnDesactivar.style.display = 'inline-block';
+                } else {
+                    statusDiv.innerHTML = `<div style="background: #d4edda; padding: 0.8rem; border-radius: 8px; color: #155724; border-left: 4px solid #28a745;">
+                        ✅ <strong>Modo normal</strong> - Los cambios se guardan en disco.
+                    </div>`;
+                    btnActivar.style.display = 'inline-block';
+                    btnDesactivar.style.display = 'none';
+                }
+            } catch (error) {
+                document.getElementById('modoPruebaStatus').innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ Error al obtener estado: ${error.message}</div>`;
+            }
+        }
+
+        async function activarModoPrueba() {
+            if (!confirm('⚠️ ¿Estás seguro de activar el modo prueba?\n\nSe guardará una copia de seguridad de tus datos actuales y empezarás desde cero. Todos los cambios realizados en modo prueba se borrarán al desactivarlo.')) return;
+            
+            const msg = document.getElementById('modoPruebaMensaje');
+            msg.innerHTML = '<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px;">⏳ Activando modo prueba...</div>';
+            
+            try {
+                const res = await fetch('/api/modo-prueba/activar', { method: 'POST' });
                 const data = await res.json();
                 if (data.success) {
                     msg.innerHTML = `<div style="background: #d4edda; padding: 0.8rem; border-radius: 8px; color: #155724;">✅ ${data.message}</div>`;
@@ -110,6 +298,29 @@
                 msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ Error: ${error.message}</div>`;
             }
         }
+
+        async function desactivarModoPrueba() {
+            if (!confirm('⚠️ ¿Estás seguro de desactivar el modo prueba?\n\nSe BORRARÁN TODOS los cambios realizados en modo prueba y se restaurarán los datos originales.')) return;
+            
+            const msg = document.getElementById('modoPruebaMensaje');
+            msg.innerHTML = '<div style="background: #fff3cd; padding: 0.8rem; border-radius: 8px;">⏳ Desactivando modo prueba...</div>';
+            
+            try {
+                const res = await fetch('/api/modo-prueba/desactivar', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    msg.innerHTML = `<div style="background: #d4edda; padding: 0.8rem; border-radius: 8px; color: #155724;">✅ ${data.message}</div>`;
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                msg.innerHTML = `<div style="background: #f8d7da; padding: 0.8rem; border-radius: 8px; color: #721c24;">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Cargar estado al cargar la página
+        document.addEventListener('DOMContentLoaded', obtenerEstadoModoPrueba);
     </script>
 </body>
 </html>
