@@ -113,8 +113,8 @@
     </header>
 
     <div class="container">
-        <!-- Mostrar mensajes flash si existen -->
-        <% if (flash && flash.message) { %>
+        <!-- Mostrar mensajes flash si existen (con validación) -->
+        <% if (typeof flash !== 'undefined' && flash && flash.message) { %>
             <div class="flash-message flash-<%= flash.type || 'success' %>">
                 <%= flash.message %>
             </div>
