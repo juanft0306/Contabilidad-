@@ -7,7 +7,8 @@ import rateRoutes from './rateRoutes.js';
 import clientRoutes from './clientRoutes.js';
 import authRoutes from './authRoutes.js';
 import backupRoutes from './backupRoutes.js';
-import paymentRoutes from './paymentRoutes.js'; // NUEVA RUTA PARA PAGOS
+import paymentRoutes from './paymentRoutes.js';
+import modoPruebaRoutes from './modoPruebaRoutes.js';
 
 const router = express.Router();
 
@@ -29,7 +30,8 @@ router.use('/api/tasas', rateRoutes);
 router.use('/api/clientes', clientRoutes);
 router.use('/api/auth', authRoutes);
 router.use('/api/backup', backupRoutes);
-router.use('/api/pagos', paymentRoutes); // NUEVA RUTA
+router.use('/api/pagos', paymentRoutes);
+router.use('/api/modo-prueba', modoPruebaRoutes);
 
 // ==========================================
 // VISTAS (PÁGINAS WEB)
@@ -77,12 +79,9 @@ router.get('/configuracion', (req, res) => {
     res.render('configuracion');
 });
 
-// ==========================================
-// NUEVA VISTA: CUENTAS POR COBRAR (PAGOS)
-// ==========================================
+// Cuentas por Cobrar
 router.get('/cuentas-por-cobrar', (req, res) => {
     const datos = req.app.locals.datos;
-    // Calcular resumen de cartera
     const cartera = {};
     for (const factura of datos.facturas) {
         if (factura.saldo_pendiente > 0) {
@@ -103,16 +102,13 @@ router.get('/cuentas-por-cobrar', (req, res) => {
     res.render('cuentas_por_cobrar', { cartera: resumenCartera });
 });
 
-// Vista para registrar pago
 router.get('/registrar-pago', (req, res) => {
     const datos = req.app.locals.datos;
     const facturasPendientes = datos.facturas.filter(f => f.saldo_pendiente > 0);
     res.render('registrar_pago', { facturasPendientes });
 });
 
-// ==========================================
-// NUEVA VISTA: GASTOS
-// ==========================================
+// Gastos
 router.get('/gastos', (req, res) => {
     const datos = req.app.locals.datos;
     const gastos = datos.gastos || [];
