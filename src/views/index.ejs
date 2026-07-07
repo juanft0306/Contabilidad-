@@ -15,13 +15,15 @@
                 <a href="/ventas">💰 Ventas</a>
                 <a href="/contabilidad">📊 Contabilidad</a>
                 <a href="/facturas">🧾 Facturas</a>
-                <a href="/configuracion" class="active">⚙️ Configuración</a> <!-- NUEVO -->
+                <a href="/cuentas-por-cobrar">💳 Cuentas por Cobrar</a>
+                <a href="/configuracion">⚙️ Configuración</a>
             </div>
         </nav>
     </header>
 
     <div class="container">
-        <% if (modoPrueba) { %>
+        <!-- BADGE DE MODO PRUEBA -->
+        <% if (modoPrueba || (datos && datos.modo_prueba_activo)) { %>
             <div class="alert alert-warning">⚠️ MODO PRUEBA ACTIVO - Los cambios no se guardan</div>
         <% } %>
 
@@ -46,13 +48,19 @@
                     <div style="font-size: 1.8rem; font-weight: 700; color: #f7971e;"><%= datos.libro_diario.length %></div>
                     <div style="color: #666;">Transacciones</div>
                 </div>
+                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem;">💳</div>
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #e74c3c;"><%= datos.facturas.filter(f => f.saldo_pendiente > 0).length %></div>
+                    <div style="color: #666;">Cuentas por Cobrar</div>
+                </div>
             </div>
 
-            <div class="btn-group" style="justify-content: center; margin-top: 1rem;">
+            <div class="btn-group" style="justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
                 <a href="/inventario" class="btn btn-primary">📦 Ver Inventario</a>
                 <a href="/ventas" class="btn btn-success">💰 Nueva Venta</a>
                 <a href="/facturas" class="btn btn-warning">🧾 Facturas</a>
-                <a href="/configuracion" class="btn btn-outline">⚙️ Configuración</a> <!-- NUEVO -->
+                <a href="/cuentas-por-cobrar" class="btn btn-danger">💳 Cuentas por Cobrar</a>
+                <a href="/configuracion" class="btn btn-outline">⚙️ Configuración</a>
             </div>
         </div>
     </div>
