@@ -19,6 +19,9 @@ export function inicializarDatos() {
         password_hash: null,
         password_salt: '',
         ultimo_id_cliente: 0,
-        ultimo_id_proveedor: 0
+        ultimo_id_proveedor: 0,
+        // NUEVOS CAMPOS PARA MODO PRUEBA
+        modo_prueba_activo: false,
+        datos_prueba: null // Copia de los datos antes de activar modo prueba
     };
 }
