@@ -3,10 +3,20 @@ import path from 'path';
 import { ARCHIVO_DATOS, ARCHIVO_BACKUP, MODO_PRUEBA } from './constants.js';
 import { inicializarDatos } from '../models/dataModel.js';
 
-// Asegurar que el directorio data existe al cargar el módulo
 const DATA_DIR = path.dirname(ARCHIVO_DATOS);
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+// Variable global para saber si estamos en modo prueba (desde la interfaz)
+let modoPruebaActivo = false;
+
+export function setModoPruebaActivo(activo) {
+    modoPruebaActivo = activo;
+}
+
+export function isModoPruebaActivo() {
+    return modoPruebaActivo;
 }
 
 export function cargarDatos() {
@@ -16,15 +26,18 @@ export function cargarDatos() {
         return estructura;
     }
     const contenido = fs.readFileSync(ARCHIVO_DATOS, 'utf-8');
-    return JSON.parse(contenido);
+    const datos = JSON.parse(contenido);
+    // Sincronizar variable global con el estado guardado
+    modoPruebaActivo = datos.modo_prueba_activo || false;
+    return datos;
 }
 
 export function guardarDatos(datos) {
-    if (MODO_PRUEBA) {
+    // Si está en modo prueba (desde interfaz) o MODO_PRUEBA global, no guardar
+    if (modoPruebaActivo || MODO_PRUEBA) {
         console.log('🔹 (Modo prueba) Los cambios no se guardan en disco.');
         return;
     }
-    // Asegurar que el directorio existe antes de escribir
     const dir = path.dirname(ARCHIVO_DATOS);
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
