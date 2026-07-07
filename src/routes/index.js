@@ -108,7 +108,10 @@ router.get('/registrar-pago', (req, res) => {
     res.render('registrar_pago', { facturasPendientes });
 });
 
-// Gastos
+// ==========================================
+// GASTOS (COMENTADOS HASTA QUE SE IMPLEMENTEN)
+// ==========================================
+/*
 router.get('/gastos', (req, res) => {
     const datos = req.app.locals.datos;
     const gastos = datos.gastos || [];
@@ -121,5 +124,6 @@ router.get('/gastos/agregar', (req, res) => {
     const categorias = datos.categorias_gastos || ['Pasaje', 'Combustible', 'Mantenimiento', 'Sueldos', 'Alquiler', 'Impuestos', 'Otros'];
     res.render('agregar_gasto', { categorias });
 });
+*/
 
 export default router;
